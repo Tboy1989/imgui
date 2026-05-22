@@ -104,6 +104,7 @@ Index of this file:
 // [SECTION] DemoWindowTables()
 // [SECTION] DemoWindowInputs()
 // [SECTION] About Window / ShowAboutWindow()
+// [SECTION] Help Window / ShowHelpWindow()
 // [SECTION] Style Editor / ShowStyleEditor()
 // [SECTION] User Guide / ShowUserGuide()
 // [SECTION] Example App: Main Menu Bar / ShowExampleAppMainMenuBar()
@@ -319,6 +320,7 @@ struct ImGuiDemoWindowData
     bool ShowIDStackTool = false;
     bool ShowStyleEditor = false;
     bool ShowAbout = false;
+    bool ShowHelp = false;
 
     // Other data
     bool DisableSections = false;
@@ -363,6 +365,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     if (demo_data.ShowDebugLog)             { ImGui::ShowDebugLogWindow(&demo_data.ShowDebugLog); }
     if (demo_data.ShowIDStackTool)          { ImGui::ShowIDStackToolWindow(&demo_data.ShowIDStackTool); }
     if (demo_data.ShowAbout)                { ImGui::ShowAboutWindow(&demo_data.ShowAbout); }
+    if (demo_data.ShowHelp)                 { ImGui::ShowHelpWindow(&demo_data.ShowHelp); }
     if (demo_data.ShowStyleEditor)
     {
         ImGui::Begin("Dear ImGui Style Editor", &demo_data.ShowStyleEditor);
@@ -713,6 +716,7 @@ static void DemoWindowMenuBar(ImGuiDemoWindowData* demo_data)
                 ImGui::SetItemTooltip("Requires io.ConfigDebugIsDebuggerPresent=true to be set.\n\nWe otherwise disable some extra features to avoid casual users crashing the application.");
             ImGui::MenuItem("Style Editor", NULL, &demo_data->ShowStyleEditor);
             ImGui::MenuItem("About Dear ImGui", NULL, &demo_data->ShowAbout);
+            ImGui::MenuItem("Help", NULL, &demo_data->ShowHelp);
 
             ImGui::EndMenu();
         }
@@ -8648,6 +8652,47 @@ void ImGui::ShowUserGuide()
 }
 
 //-----------------------------------------------------------------------------
+// [SECTION] Help Window / ShowHelpWindow()
+// Access from Dear ImGui Demo -> Tools -> Help
+//-----------------------------------------------------------------------------
+
+void ImGui::ShowHelpWindow(bool* p_open)
+{
+    if (!ImGui::Begin("Dear ImGui Help", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        ImGui::End();
+        return;
+    }
+    IMGUI_DEMO_MARKER("Tools/Help");
+
+    ImGui::SeparatorText("USER GUIDE:");
+    ImGui::ShowUserGuide();
+
+    ImGui::SeparatorText("FREQUENTLY ASKED QUESTIONS:");
+    ImGui::BulletText("Where is the documentation?");
+    ImGui::Indent();
+    ImGui::TextLinkOpenURL("FAQ", "https://github.com/ocornut/imgui/blob/master/docs/FAQ.md");
+    ImGui::SameLine();
+    ImGui::TextLinkOpenURL("Wiki", "https://github.com/ocornut/imgui/wiki");
+    ImGui::SameLine();
+    ImGui::TextLinkOpenURL("Homepage", "https://github.com/ocornut/imgui");
+    ImGui::Unindent();
+    ImGui::BulletText("How do I integrate Dear ImGui in my application?");
+    ImGui::Indent();
+    ImGui::BulletText("See backends/ folder for platform and renderer backends.");
+    ImGui::BulletText("See examples/ folder for complete integration examples.");
+    ImGui::Unindent();
+    ImGui::BulletText("How do I get help or report a bug?");
+    ImGui::Indent();
+    ImGui::TextLinkOpenURL("GitHub Issues", "https://github.com/ocornut/imgui/issues");
+    ImGui::SameLine();
+    ImGui::TextLinkOpenURL("GitHub Discussions", "https://github.com/ocornut/imgui/discussions");
+    ImGui::Unindent();
+
+    ImGui::End();
+}
+
+//-----------------------------------------------------------------------------
 // [SECTION] Example App: Main Menu Bar / ShowExampleAppMainMenuBar()
 //-----------------------------------------------------------------------------
 // - ShowExampleAppMainMenuBar()
@@ -10858,6 +10903,7 @@ void ShowExampleAppAssetsBrowser(bool* p_open)
 
 void ImGui::ShowAboutWindow(bool*) {}
 void ImGui::ShowDemoWindow(bool*) {}
+void ImGui::ShowHelpWindow(bool*) {}
 void ImGui::ShowUserGuide() {}
 void ImGui::ShowStyleEditor(ImGuiStyle*) {}
 bool ImGui::ShowStyleSelector(const char*) { return false; }
